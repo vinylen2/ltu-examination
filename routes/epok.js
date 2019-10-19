@@ -1,7 +1,7 @@
 
 const router = require('koa-router')({ prefix: '/epok' });
 
-const { Epok } = require('../epokModels');
+const { ApplicationCode } = require('../epokModels');
 
 async function getApplicationCode(ctx) {
   const termQuery = ctx.request.query.term;
