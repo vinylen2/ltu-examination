@@ -7,9 +7,13 @@ module.exports = function modelExport(db, DataTypes) {
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
       SSN: DataTypes.INTEGER,
-      ltuID: DataTypes.STRING,
+      idealId: DataTypes.STRING,
       email: DataTypes.STRING,
     });
+
+  Model.associate = function (models) {
+    this.belongsToMany(models.CourseOpenings, { through: 'StudentCourses' });
+  };
 
   return Model;
 };

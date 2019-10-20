@@ -32,7 +32,7 @@ epokModels.connection.sync().then(() => {
   app.use(epok.routes());
 });
 
-idealModels.connection.sync().then(() => {
+idealModels.connection.sync({alter: true}).then(() => {
   console.log(`Server listening on port: ${config.port}`);
   app.use(ideal.routes());
 });
