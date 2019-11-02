@@ -35,7 +35,22 @@ async function getGrades(ctx) {
   };
 };
 
+async function postGrade(ctx) {
+  const { SSN, openingCode, examNumber, date, grade } = ctx.request.body;
+
+  ctx.body = {
+    data: {
+      SSN,
+      openingCode,
+      examNumber,
+      date,
+      grade
+    },
+  }
+};
+
 router.get('/', rootRoute);
 router.get('/grades', getGrades);
+router.post('/grade', postGrade);
 
 module.exports = router;

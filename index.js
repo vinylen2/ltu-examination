@@ -3,7 +3,7 @@ const Koa = require('koa');
 
 // used to parse body repsonses from API
 const bodyParser = require('koa-bodyparser');
-//const cors = require('koa2-cors');
+const cors = require('koa2-cors');
 
 // loads config file for DB-connections and port
 const config = require ('./config.json');
@@ -20,12 +20,12 @@ const app = new Koa();
 app.use(bodyParser());
 
 // Enable CORS
-// app.use(cors({
-//   origin: 'http://localhost:8080',
-//   credentials: true,
-//   allowMethods: ['GET', 'PATCH', 'POST'],
-//   allowHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
-// }));
+app.use(cors({
+  origin: 'http://localhost:8080',
+  credentials: true,
+  allowMethods: ['GET', 'PATCH', 'POST'],
+  allowHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
+}));
 
 // routes
 const epok = require('./routes/epok.js');
