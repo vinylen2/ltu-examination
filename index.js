@@ -30,6 +30,7 @@ app.use(bodyParser());
 // routes
 const epok = require('./routes/epok.js');
 const ideal = require('./routes/ideal.js');
+const ladok = require('./routes/ladok.js');
 
 app.listen(config.port);
 
@@ -44,7 +45,7 @@ idealModels.connection.sync().then(() => {
   app.use(ideal.routes());
 });
 
-ladokModels.connection.sync().then(() => {
+ladokModels.connection.sync({alter:true}).then(() => {
   console.log(`Server listening on port: ${config.port}`);
-  //app.use(ideal.routes());
+  app.use(ladok.routes());
 });
