@@ -1,38 +1,44 @@
+// library to create REST APIs in Node
 const Koa = require('koa');
-const router = require('koa-router');
-const bodyParser = require('koa-bodyparser');
-const cors = require('koa2-cors');
 
+// used to parse body repsonses from API
+const bodyParser = require('koa-bodyparser');
+//const cors = require('koa2-cors');
+
+// loads config file for DB-connections and port
 const config = require ('./config.json');
+
+// models
 const epokModels = require('./epokModels');
 const idealModels = require('./idealModels');
 
-
+// creates an instance of the API
 const app = new Koa();
 
+// uses bodyParser-lib
 app.use(bodyParser());
 
 // Enable CORS
-app.use(cors({
-  origin: 'http://localhost:8080',
-  credentials: true,
-  allowMethods: ['GET', 'PATCH', 'POST'],
-  allowHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
-}));
+// app.use(cors({
+//   origin: 'http://localhost:8080',
+//   credentials: true,
+//   allowMethods: ['GET', 'PATCH', 'POST'],
+//   allowHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
+// }));
 
+// routes
 const epok = require('./routes/epok.js');
 const ideal = require('./routes/ideal.js');
 
 app.listen(config.port);
 
 //Creates database connection
-epokModels.connection.sync().then(() => {
+epokModels.connection.sync({alter:true}).then(() => {
   console.log(`Server listening on port: ${config.port}`);
-  console.log('Sequelize synchronized');
   app.use(epok.routes());
 });
 
-idealModels.connection.sync({alter: true}).then(() => {
+idealModels.connection.sync().then(() => {
   console.log(`Server listening on port: ${config.port}`);
   app.use(ideal.routes());
 });

@@ -4,8 +4,10 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
+
 const config = require('../config.json').epok;
 
+// creates connection to database from config.json
 const connection = new Sequelize(
   config.database,
   config.username,
@@ -18,6 +20,7 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+// fetches models from dir automatically
 fs
   .readdirSync(__dirname)
   .filter(file => file.indexOf('.') !== 0 && file !== 'index.js')
@@ -35,4 +38,5 @@ Object.keys(db).forEach((modelName) => {
 db.connection = connection;
 db.Sequelize = Sequelize;
 
+// export connection
 module.exports = db;

@@ -1,6 +1,7 @@
 
 const path = require('path');
 
+// gets tablename from filename
 const tableName = path.basename(__filename, '.js');
 
 module.exports = function modelExport(db, DataTypes) {
@@ -9,8 +10,12 @@ module.exports = function modelExport(db, DataTypes) {
     name: DataTypes.STRING,
   });
 
+  // creates 1-1 association
+  // Model.associate = function (models) {
+  //   this.hasOne(models.ApplicationCode);
+  // };
   Model.associate = function (models) {
-    this.hasOne(models.ApplicationCode);
+    this.belongsToMany(models.ApplicationCode, { through: 'CourseApplicationCodes'});
   };
 
   return Model;

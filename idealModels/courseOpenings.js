@@ -8,6 +8,7 @@ module.exports = function modelExport(db, DataTypes) {
       courseCode: DataTypes.STRING,
     });
 
+    // creates n-n relation
   Model.associate = function (models) {
     this.belongsToMany(models.Student, { through: 'StudentCourses' });
   }

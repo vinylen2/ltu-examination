@@ -11,6 +11,7 @@ module.exports = function modelExport(db, DataTypes) {
       email: DataTypes.STRING,
     });
 
+  // creates n-n relation
   Model.associate = function (models) {
     this.belongsToMany(models.CourseOpenings, { through: 'StudentCourses' });
   };

@@ -1,18 +1,51 @@
 
 const router = require('koa-router')({ prefix: '/epok' });
 
-const { ApplicationCode } = require('../epokModels');
+const { Term, CourseCode, ApplicationCode } = require('../epokModels');
 
 async function getApplicationCode(ctx) {
-  const termQuery = ctx.request.query.term;
-  const courseCodeQuery = ctx.request.query.courseCode;
+  // fetch query values from req
+  const term = ctx.request.query.term;
+  const courseCode = ctx.request.query.courseCode;
 
-  ctx.body = {
-    data: {
-      term: termQuery,
-      courseCode: courseCodeQuery,
+  if (term && courseCode) {
+    // fetch data from DB with Sequelize connection
+    const applicationCode = await ApplicationCode.findAll({
+      attributes: ['applicationCode'],
+      include: [
+        // join on Term from search query
+        {
+          model: Term,
+          attributes: [],
+          where: { term },
+        },
+        // join on Term from search query
+        {
+          model: CourseCode,
+          attributes: [],
+          where: { courseCode },
+        }
+      ],
+    })
+    const result = applicationCode[0];
+    if (!result) {
+      message = 'No results found';
+    } else {
+      message = 'Success';
     }
-  };
+
+    ctx.body = {
+      message,
+      data: {
+        result,
+      }
+    };
+
+  } else {
+    ctx.body = {
+      message: 'Request requires parameters term and courseCode',
+    };
+  }
 }
 
 router.get('/getApplicationCode', getApplicationCode);
