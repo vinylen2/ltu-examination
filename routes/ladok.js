@@ -36,16 +36,57 @@ async function getGrades(ctx) {
 };
 
 async function postGrade(ctx) {
+  // gets value from body in JSON
   const { SSN, openingCode, examNumber, date, grade } = ctx.request.body;
 
-  ctx.body = {
-    data: {
-      SSN,
-      openingCode,
+  // finds studentId from SSN value for db-relation
+  const studentObject = await Student.findAll({
+    where: { SSN },
+  });
+
+  // finds openingCodeId from openingCode value for db-relation
+  const openingCodeObject = await CourseOpenings.findAll({
+    where: { openingCode },
+  });
+
+  // inserts grade row from request
+  if (studentObject.length > 0 && openingCodeObject.length > 0 ) {
+    const insertedGrade = await Grade.create({
       examNumber,
       date,
-      grade
-    },
+      grade,
+    });
+
+    // creates relation to student and courseOpening with sequelize function
+    insertedGrade.setStudent(studentObject[0]);
+    insertedGrade.setCourseOpening(openingCodeObject[0]);
+
+    ctx.body = {
+      data: {
+        insertedGrade
+      },
+    };
+
+  } 
+
+  // error handling
+  if (studentObject.length == 0 && openingCodeObject.length > 0) {
+    ctx.body = {
+      message: 'No student found',
+    };
+
+  }
+
+  if (studentObject.length > 0 && openingCodeObject.length == 0) {
+    ctx.body = {
+      message: 'No openingCode Found',
+    };
+  }
+
+  if (studentObject.length == 0 && openingCodeObject.length == 0) {
+    ctx.body = {
+      message: 'No student or openingCode found',
+    };
   }
 };
 

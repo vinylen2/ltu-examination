@@ -35,7 +35,7 @@ const ladok = require('./routes/ladok.js');
 app.listen(config.port);
 
 //Creates database connection
-epokModels.connection.sync({alter:true}).then(() => {
+epokModels.connection.sync().then(() => {
   console.log(`Server listening on port: ${config.port}`);
   app.use(epok.routes());
 });
@@ -45,7 +45,7 @@ idealModels.connection.sync().then(() => {
   app.use(ideal.routes());
 });
 
-ladokModels.connection.sync({alter:true}).then(() => {
+ladokModels.connection.sync().then(() => {
   console.log(`Server listening on port: ${config.port}`);
   app.use(ladok.routes());
 });

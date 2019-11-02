@@ -4,10 +4,7 @@ const tableName = path.basename(__filename, '.js');
 
 module.exports = function modelExport(db, DataTypes) {
   const Model = db.define(tableName, {
-      examNumber: {
-        type: DataTypes.STRING,
-        unique: true,
-      },
+      examNumber: DataTypes.STRING,
       date: DataTypes.DATE,
       grade: DataTypes.STRING,
     });
