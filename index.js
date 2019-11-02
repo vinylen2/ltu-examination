@@ -11,6 +11,7 @@ const config = require ('./config.json');
 // models
 const epokModels = require('./epokModels');
 const idealModels = require('./idealModels');
+const ladokModels = require('./ladokModels');
 
 // creates an instance of the API
 const app = new Koa();
@@ -41,4 +42,9 @@ epokModels.connection.sync({alter:true}).then(() => {
 idealModels.connection.sync().then(() => {
   console.log(`Server listening on port: ${config.port}`);
   app.use(ideal.routes());
+});
+
+ladokModels.connection.sync().then(() => {
+  console.log(`Server listening on port: ${config.port}`);
+  //app.use(ideal.routes());
 });
