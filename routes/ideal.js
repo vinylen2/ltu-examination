@@ -13,6 +13,10 @@ async function getStudent(ctx) {
 
   // TO-DO error handling if values are missing in Query
   // DB request
+
+  // helloeoeo
+
+  
   const student = await Student.findAll({
     // using value for idealID from query
     where: {idealId},
