@@ -29,8 +29,11 @@ async function getApplicationCode(ctx) {
     })
     const result = applicationCode[0];
     if (!result) {
+      ctx.status = 204;
+
       message = 'No results found';
     } else {
+      ctx.status = 200;
       message = 'Success';
     }
 
@@ -42,12 +45,14 @@ async function getApplicationCode(ctx) {
     };
 
   } else {
+    ctx.status = 400;
+
     ctx.body = {
       message: 'Request requires parameters term and courseCode',
     };
   }
 }
 
-router.get('/getApplicationCode', getApplicationCode);
+router.get('/application', getApplicationCode);
 
 module.exports = router;

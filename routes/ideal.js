@@ -11,33 +11,49 @@ async function getStudent(ctx) {
   const idealId = ctx.request.query.idealId;
   const openingCode = ctx.request.query.openingCode;
 
-  // TO-DO error handling if values are missing in Query
-  // DB request
-  const student = await Student.findAll({
-    // using value for idealID from query
-    where: {idealId},
-    // join using Sequelize with value for openingCode from query
-    include: [
-      { 
-        model: CourseOpenings,
-        where: {openingCode: openingCode},
-      },
-    ],
-  })
 
-  // error handling
-  try {
-    const SSN = student[0].SSN;
+  if (idealId && openingCode) {
+    const student = await Student.findAll({
+      // using value for idealID from query
+      where: {idealId},
+      // join using Sequelize with value for openingCode from query
+      include: [
+        { 
+          model: CourseOpenings,
+          where: {openingCode: openingCode},
+        },
+      ],
+    })
+
+    // error handling
+    try {
+      const SSN = student[0].SSN;
+      // server is returning content
+      ctx.status = 200;
+
+      ctx.body = {
+        data: {
+          SSN,
+        },
+      };
+
+    } catch {
+      // OK request but empty content
+      ctx.status = 204;
+
+      ctx.body = {
+        message: 'No student found',
+      };
+    }
+
+  } else {
+    // faulty request, missing parameters
+    ctx.status = 400;
     ctx.body = {
-      data: {
-        SSN,
-      },
-    };
-  } catch {
-    ctx.body = {
-      message: 'No student found',
+      message: "Request requires parameters idealId and openingCode",
     };
   }
+  // DB request
 
 }
 

@@ -30,6 +30,8 @@ async function getGrades(ctx) {
     ]
   });
 
+  ctx.status = 200;
+
   ctx.body = {
     student,
   };
@@ -61,6 +63,7 @@ async function postGrade(ctx) {
     insertedGrade.setStudent(studentObject[0]);
     insertedGrade.setCourseOpening(openingCodeObject[0]);
 
+    ctx.status = 201;
     ctx.body = {
       data: {
         insertedGrade
@@ -71,19 +74,24 @@ async function postGrade(ctx) {
 
   // error handling
   if (studentObject.length == 0 && openingCodeObject.length > 0) {
+    ctx.status = 400;
+
     ctx.body = {
       message: 'No student found',
     };
-
   }
 
   if (studentObject.length > 0 && openingCodeObject.length == 0) {
+    ctx.status = 400;
+
     ctx.body = {
       message: 'No openingCode Found',
     };
   }
 
   if (studentObject.length == 0 && openingCodeObject.length == 0) {
+    ctx.status = 400;
+
     ctx.body = {
       message: 'No student or openingCode found',
     };
