@@ -27,10 +27,13 @@ async function getApplicationCode(ctx) {
         }
       ],
     })
+    // error handling
     const result = applicationCode[0];
-    if (!result) {
-      ctx.status = 204;
 
+    // if the result array is empty that means the SQL-query got no results
+    // sets message to append to body for API-call
+    if (!result) {
+      ctx.status = 200;
       message = 'No results found';
     } else {
       ctx.status = 200;
@@ -39,20 +42,19 @@ async function getApplicationCode(ctx) {
 
     ctx.body = {
       message,
-      data: {
-        result,
-      }
+      data: result,
     };
 
   } else {
+    // all required parameters are not present
     ctx.status = 400;
-
     ctx.body = {
       message: 'Request requires parameters term and courseCode',
     };
   }
 }
 
+// adding routes and linking them to functinos for DB-calls
 router.get('/application', getApplicationCode);
 
 module.exports = router;

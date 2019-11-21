@@ -16,10 +16,10 @@ const ladokModels = require('./ladokModels');
 // creates an instance of the API
 const app = new Koa();
 
-// uses bodyParser-lib
+// uses bodyParser-lib to construct bodys for returning data
 app.use(bodyParser());
 
-// Enable CORS
+// Enable CORS 
 app.use(cors({
   origin: 'http://localhost:8080',
   credentials: true,
@@ -32,9 +32,10 @@ const epok = require('./routes/epok.js');
 const ideal = require('./routes/ideal.js');
 const ladok = require('./routes/ladok.js');
 
+// sets port for API from configfile
 app.listen(config.port);
 
-//Creates database connection
+//Creates database connections from models
 epokModels.connection.sync().then(() => {
   console.log(`Server listening on port: ${config.port}`);
   app.use(epok.routes());

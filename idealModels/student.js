@@ -1,7 +1,9 @@
 const path = require('path');
 
+// gets tablename from filename
 const tableName = path.basename(__filename, '.js');
 
+// create model and export
 module.exports = function modelExport(db, DataTypes) {
   const Model = db.define(tableName, {
       firstName: DataTypes.STRING,
@@ -11,7 +13,7 @@ module.exports = function modelExport(db, DataTypes) {
       email: DataTypes.STRING,
     });
 
-  // creates n-n relation
+  // creates m-m relation
   Model.associate = function (models) {
     this.belongsToMany(models.CourseOpenings, { through: 'StudentCourses' });
   };

@@ -3,16 +3,16 @@ const router = require('koa-router')({ prefix: '/ideal' });
 // models for connection to DB
 const { Student, CourseOpenings } = require('../idealModels');
 
-async function rootRoute(ctx) {
-};
-
 async function getStudent(ctx) {
-  // get query values from req
+  // get query values from URL
   const idealId = ctx.request.query.idealId;
   const openingCode = ctx.request.query.openingCode;
 
 
+  // if both query values are provided, run sequelize function
   if (idealId && openingCode) {
+    // finds all students with sequelize function "findAll"
+    // async call with ES8 async...await
     const student = await Student.findAll({
       // using value for idealID from query
       where: {idealId},

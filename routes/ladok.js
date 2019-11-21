@@ -3,6 +3,7 @@ const router = require('koa-router')({ prefix: '/ladok' });
 // models for connection to DB
 const { Student, Grade, CourseOpenings } = require('../ladokModels');
 
+// basic rootroute for testing
 async function rootRoute(ctx) {
   ctx.body = {
     data: 'this is ladok route',
@@ -11,11 +12,17 @@ async function rootRoute(ctx) {
 
 // route to fetch all grades from SSN
 async function getGrades(ctx) {
+  // get SSN from query in URL
   const SSN = ctx.request.query.ssn;
 
+  // finds all students with sequelize function "findAll"
+  // async call with ES8 async...await
   const student = await Student.findAll({
+    // syntax for "WHERE"-clause in SQL
     where: { SSN },
+    // selected attributes 
     attributes: ['firstName', 'lastName'],
+    // joins grade and courseopenings
     include: [
       {
         model: Grade,
@@ -30,8 +37,10 @@ async function getGrades(ctx) {
     ]
   });
 
+  // sets HTTP status code to 200
   ctx.status = 200;
 
+  // attaches student object to the body
   ctx.body = {
     student,
   };
@@ -98,6 +107,7 @@ async function postGrade(ctx) {
   }
 };
 
+// adding routes and linking them to functions for DB-calls
 router.get('/', rootRoute);
 router.get('/grades', getGrades);
 router.post('/grade', postGrade);
